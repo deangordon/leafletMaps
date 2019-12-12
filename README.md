@@ -1,4 +1,4 @@
-# leafletMaps
+# Things I've done with Leaflet Maps
 Simple cases of some techniques with leaflet and rgdal I've found really helpful.
 
 This is based on data published by NISRA and data I've made up myself for the purpose of examples. The code produces interactive maps, in that you can zoom in and clicking on shapes will display more information. The attached code has commented examples of:
