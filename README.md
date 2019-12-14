@@ -11,3 +11,7 @@ This is based on data published by NISRA and data I've made up myself for the pu
 * Adding a colour-gradient to map features
 * Controlling the layers on a map to ensure the correct layer is on top
 * Adding a legend and bespoke attribution line
+
+![screen-grab of interactive map](https://github.com/deangordon/leafletMaps/blob/master/sampleMap.JPG)
+
+This image is deliberately sparse, as when showing data on a map I usually want to minimise what else is on the map, so this map does not show terrain or parks, which can get confusing. As it's amde with leaflet, it is really easy to choose maps for your purposes, including satellite images if you plan to zoom right in.
