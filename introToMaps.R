@@ -1,6 +1,7 @@
 library(tidyverse)
 library(leaflet)
 library(rgdal)
+library(htmlwidgets)
 
 #### Create points in NI to plot on map ####
 
@@ -133,7 +134,10 @@ colNum <- colorNumeric(c('#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6
 # This consists of setting a leaflet option at the top and then using addControl
 # with an appropriate class name (this is a CSS attribute, for those familiar)
 
-leaflet(options = leafletOptions(attributionControl=FALSE)) %>%
+# I have also set the map to a variable so that I can save it using htmlWidgets
+# and share it as an ordinary html file
+
+map <- leaflet(options = leafletOptions(attributionControl=FALSE)) %>%
   addMapPane("level1", zIndex = 410) %>%      # Level 1: bottom
   addMapPane("level2", zIndex = 420) %>%      # Level 2: middle 1
   addMapPane("level3", zIndex = 425) %>%      # Level 3: middle 2
@@ -153,3 +157,6 @@ leaflet(options = leafletOptions(attributionControl=FALSE)) %>%
             labFormat = labelFormat(suffix = "%"),
             opacity = 0.6) %>%
   addControl("<i>Leaflet | Map tiles by Stamen Design, CC BY 3.0 and © CartoDB - Map data © OpenStreetMap, © Dean Gordon</i>", "bottomright", className = "leaflet-control-attribution")
+
+
+saveWidget(map, "introToMaps.html")
