@@ -91,6 +91,7 @@ leaflet() %>%
 # runif is "random uniform distribution", with arguments number of points, minimum and maximum values, see ?runif
 # The code "row.names(shapeData) %in% as.integer(runif(400, 1,890))" creates a TRUE/FALSE vector
 shapeData3 <- subset(shapeData2, row.names(shapeData) %in% as.integer(runif(400, 1,890)))
+st_simplify
 perSoa <- over(df2, shapeData3)
 dfWithSoa <- cbind.data.frame(df2, perSoa)
 df3 <- subset(df2, !is.na(dfWithSoa$SOA_CODE))
@@ -134,10 +135,7 @@ colNum <- colorNumeric(c('#fff7ec','#fee8c8','#fdd49e','#fdbb84','#fc8d59','#ef6
 # This consists of setting a leaflet option at the top and then using addControl
 # with an appropriate class name (this is a CSS attribute, for those familiar)
 
-# I have also set the map to a variable so that I can save it using htmlWidgets
-# and share it as an ordinary html file
-
-map <- leaflet(options = leafletOptions(attributionControl=FALSE)) %>%
+leaflet(options = leafletOptions(attributionControl=FALSE)) %>%
   addMapPane("level1", zIndex = 410) %>%      # Level 1: bottom
   addMapPane("level2", zIndex = 420) %>%      # Level 2: middle 1
   addMapPane("level3", zIndex = 425) %>%      # Level 3: middle 2
@@ -158,5 +156,16 @@ map <- leaflet(options = leafletOptions(attributionControl=FALSE)) %>%
             opacity = 0.6) %>%
   addControl("<i>Leaflet | Map tiles by Stamen Design, CC BY 3.0 and © CartoDB - Map data © OpenStreetMap, © Dean Gordon</i>", "bottomright", className = "leaflet-control-attribution")
 
+#### Now create an html map that can be saved as an HTML file and shared without users needing
+# any software installed. The shapefile for SOAs is very big, so I'm using a settlement file 
 
-saveWidget(map, "introToMaps.html")
+shapeData <- readOGR("R\\SDL15-ESRI_format")
+shapeData2 <- spTransform(shapeData, CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"))
+
+colfac <- colorFactor(c('#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f','#bf5b17','#666666'), c("A","B","C","D","E","F","G","H"))
+
+ni <- leaflet() %>%
+  addProviderTiles(providers$OpenStreetMap) %>%
+  addPolygons(data = shapeData2, popup = ~paste0(Name, ", Band: ",Band, ", Usually Resident Population (2011 Census): ",format(UR_ex, big.mark = ",")), color = ~colfac(Band))
+
+saveWidget(ni, "niSettlements.html")
